@@ -3,6 +3,11 @@ name: CI/CD
 
 on:
   workflow_dispatch:
+    inputs:
+      push_image:
+        type: boolean
+        description: "Do you want to push the Docker image?"
+        default: false
 
 jobs:
   lint-and-test:
@@ -46,5 +51,6 @@ jobs:
       - name: Build docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/github-action-school .
       - name: Push to Dockerhub
+        if: ${{ github.event.inputs.push_image == 'true' }}
         run: docker push ${{ secrets.DOCKER_USERNAME }}/github-action-school
  
